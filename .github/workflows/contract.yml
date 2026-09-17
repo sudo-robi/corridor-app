@@ -3,10 +3,10 @@ name: Contract CI
 on:
   push:
     branches: [main]
-    paths: ['contracts/**']
+    paths: ['contracts/**', '.github/workflows/contract.yml']
   pull_request:
     branches: [main]
-    paths: ['contracts/**']
+    paths: ['contracts/**', '.github/workflows/contract.yml']
 
 env:
   CARGO_TERM_COLOR: always

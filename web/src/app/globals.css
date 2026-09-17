@@ -1,30 +1,44 @@
 @import "tailwindcss";
 
 @theme {
-  --color-corridor-50: #f0fdf4;
-  --color-corridor-100: #dcfce7;
-  --color-corridor-200: #bbf7d0;
-  --color-corridor-300: #86efac;
-  --color-corridor-400: #4ade80;
-  --color-corridor-500: #22c55e;
-  --color-corridor-600: #16a34a;
-  --color-corridor-700: #15803d;
-  --color-corridor-800: #166534;
-  --color-corridor-900: #14532d;
-  --color-stellar-500: #8b5cf6;
-  --color-stellar-600: #7c3aed;
-  --color-stellar-700: #6d28d9;
-  --color-nigeria-green: #008751;
-  --color-bolivia-red: #d52b1e;
+  --color-page-canvas: #222222;
+  --color-deep-surface: #151515;
+  --color-void: #000000;
+  --color-platinum: #eeeef2;
+  --color-pure-white: #ffffff;
+  --color-iron: #333337;
+  --color-ash: #b4b4b8;
+  --color-accent: #e63946;
+
+  --font-text: 'Inter', 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Inter Display', 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
 }
 
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
+  --background: #222222;
+  --foreground: #eeeef2;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Elektron tracking utilities */
+.tracking-caption { letter-spacing: 0.042em; }
+.tracking-body-sm { letter-spacing: 0.04em; }
+.tracking-body { letter-spacing: 0.026em; }
+.tracking-subheading { letter-spacing: 0.017em; }
+.tracking-heading-sm { letter-spacing: 0.04em; }
+.tracking-heading { letter-spacing: 0.04em; }
+.tracking-display { letter-spacing: -0.01em; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #151515; }
+::-webkit-scrollbar-thumb { background: #333337; }
+::-webkit-scrollbar-thumb:hover { background: #eeeef2; }

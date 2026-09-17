@@ -1,12 +1,39 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.*
+
+# Build outputs
 .next/
-target/
-*.wasm
-.env.local
-.env
+out/
 dist/
 build/
-pnpm-lock.yaml
-package-lock.json
-tsconfig.tsbuildinfo
+target/
+*.wasm
+
+# Env & secrets
+.env
+.env.local
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+*.swp
+.vscode/*
+
+# Test artifacts
+coverage/
 test_snapshots/
+tsconfig.tsbuildinfo
+
+# Demo artifacts
+*.mp4
+*.mov
+*.webm
+demo/
+demos/
+recordings/

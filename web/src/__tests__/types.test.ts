@@ -1,4 +1,4 @@
-import { computeQuote, STATUS_LABELS, STATUS_COLORS, CONTRACT_TO_WEB_STATUS, WEB_TO_CONTRACT_STATUS } from "../types";
+import { STATUS_LABELS, STATUS_COLORS, CONTRACT_TO_WEB_STATUS, WEB_TO_CONTRACT_STATUS } from "../types";
 
 describe("Exchange Rate Quote Math", () => {
   test("computeQuote with 1% fee and rate 0.0042", () => {

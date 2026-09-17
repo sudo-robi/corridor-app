@@ -77,7 +77,6 @@ export function SendCorridor({ onCreated }: Props) {
 
       const { corridor } = await res.json();
 
-      // Auto-accept corridor (simulate agent matching)
       try {
         const acceptRes = await fetch("/api/corridors/accept", {
           method: "POST",
@@ -89,7 +88,7 @@ export function SendCorridor({ onCreated }: Props) {
           Object.assign(corridor, accepted);
         }
       } catch {
-        // Agent acceptance failed — corridor stays in "created"
+        // Agent acceptance failed
       }
 
       if (connected && address) {
@@ -111,7 +110,7 @@ export function SendCorridor({ onCreated }: Props) {
             }
           }
         } catch (e) {
-          console.warn("Paystack init failed, corridor created without payment:", e);
+          console.warn("Paystack init failed:", e);
         }
       }
 
@@ -131,82 +130,78 @@ export function SendCorridor({ onCreated }: Props) {
   };
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-6">
-      <h2 className="text-lg font-semibold">Send Money to Bolivia</h2>
-      <p className="mt-1 text-sm text-white/50">
-        Enter the amount in NGN and a Bolivian phone number
-      </p>
-
-      {exchangeRate && (
-        <div className="mt-2 flex items-center gap-2 text-xs text-white/30">
-          <span>Rate: 1 NGN ≈ {rate.toFixed(6)} BOB</span>
-          <span>·</span>
-          <span>Source: {exchangeRate.source}</span>
-        </div>
-      )}
-
+    <div className="mt-[28px] border border-platinum/10 bg-deep-surface">
       {error && (
-        <div className="mt-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-400">
+        <div className="border-b border-accent/30 bg-accent/10 px-[21px] py-[12px] text-[14px] tracking-[0.04em] text-accent">
           {error}
         </div>
       )}
 
-      {step === "form" && (
-        <div className="mt-6 space-y-4">
-          <div>
-            <label htmlFor="amount" className="block text-sm text-white/60 mb-1.5">
-              Amount (NGN)
-            </label>
-            <input
-              id="amount"
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="50,000"
-              min="1000"
-              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-lg text-white placeholder:text-white/30 focus:border-corridor-500 focus:outline-none focus:ring-1 focus:ring-corridor-500"
-            />
-            {amountNgn > 0 && amountNgn < 1000 && (
-              <p className="mt-1 text-xs text-red-400">Minimum 1,000 NGN</p>
-            )}
-          </div>
+      {exchangeRate && (
+        <div className="border-b border-platinum/10 px-[21px] py-[8px] text-[11px] tracking-[0.042em] text-ash">
+          RATE 1 NGN ≈ {rate.toFixed(6)} BOB · SRC {exchangeRate.source.toUpperCase()}
+        </div>
+      )}
 
-          <div>
-            <label htmlFor="phone" className="block text-sm text-white/60 mb-1.5">
-              Receiver Phone (Bolivia)
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+591 7000 0000"
-              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/30 focus:border-corridor-500 focus:outline-none focus:ring-1 focus:ring-corridor-500"
-            />
+      {step === "form" && (
+        <div className="p-[21px]">
+          <div className="grid grid-cols-2 gap-[16px]">
+            <div>
+              <label className="mb-[4px] block text-[11px] uppercase tracking-[0.042em] text-ash">
+                Amount (NGN)
+              </label>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="50,000"
+                min="1000"
+                className="w-full border border-platinum/20 bg-iron px-[18px] py-[14px] text-[14px] tracking-[0.04em] text-platinum placeholder:text-ash focus:border-platinum focus:outline-none"
+                style={{ borderRadius: "7px" }}
+              />
+              {amountNgn > 0 && amountNgn < 1000 && (
+                <p className="mt-[4px] text-[11px] tracking-[0.042em] text-accent">
+                  MIN 1,000 NGN
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="mb-[4px] block text-[11px] uppercase tracking-[0.042em] text-ash">
+                Receiver Phone (Bolivia)
+              </label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+591 7000 0000"
+                className="w-full border border-platinum/20 bg-iron px-[18px] py-[14px] text-[14px] tracking-[0.04em] text-platinum placeholder:text-ash focus:border-platinum focus:outline-none"
+                style={{ borderRadius: "7px" }}
+              />
+            </div>
           </div>
 
           {quote && (
-            <div className="rounded-lg border border-corridor-500/20 bg-corridor-500/5 p-4">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-white/60">You send</span>
-                <span className="font-medium">
+            <div className="mt-[16px] border border-platinum/10 bg-void p-[21px]">
+              <div className="flex items-center justify-between text-[14px] tracking-[0.04em]">
+                <span className="text-ash">YOU SEND</span>
+                <span className="font-[450] text-platinum">
                   ₦{quote.sendAmount.toLocaleString()}
                 </span>
               </div>
-              <div className="my-2 flex items-center gap-2 text-white/30">
-                <div className="h-px flex-1 bg-white/10" />
-                <ArrowRight className="h-4 w-4" />
-                <div className="h-px flex-1 bg-white/10" />
+              <div className="my-[12px] flex items-center gap-[8px] text-platinum/20">
+                <div className="h-px flex-1 bg-platinum/10" />
+                <ArrowRight className="h-[14px] w-[14px]" />
+                <div className="h-px flex-1 bg-platinum/10" />
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-white/60">Receiver gets</span>
-                <span className="font-medium text-corridor-400">
+              <div className="flex items-center justify-between text-[14px] tracking-[0.04em]">
+                <span className="text-ash">THEY GET</span>
+                <span className="font-[450] text-accent">
                   Bs {quote.receiveAmount.toLocaleString()}
                 </span>
               </div>
-              <div className="mt-2 flex items-center justify-between text-xs text-white/40">
-                <span>Agent fee: {(quote.feeBps / 100).toFixed(1)}%</span>
-                <span>Settlement: ~2-5 min</span>
+              <div className="mt-[12px] flex items-center justify-between text-[11px] tracking-[0.042em] text-ash">
+                <span>FEE {(quote.feeBps / 100).toFixed(1)}%</span>
+                <span>~2-5 MIN</span>
               </div>
             </div>
           )}
@@ -214,62 +209,56 @@ export function SendCorridor({ onCreated }: Props) {
           <button
             onClick={() => setStep("confirm")}
             disabled={!quote || !phone || amountNgn < 1000}
-            className="w-full rounded-lg bg-corridor-600 px-4 py-3 font-medium text-white transition-colors hover:bg-corridor-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-[16px] w-full border border-platinum bg-transparent px-[24px] py-[11px] text-[14px] uppercase tracking-[0.04em] text-platinum transition-colors hover:bg-platinum hover:text-page-canvas disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-platinum"
           >
-            <Send className="mr-2 inline h-4 w-4" />
+            <Send className="mr-[6px] inline h-[14px] w-[14px]" />
             Review Corridor
           </button>
         </div>
       )}
 
       {step === "confirm" && quote && (
-        <div className="mt-6 space-y-4">
-          <div className="rounded-lg border border-white/10 bg-white/5 p-4 space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-white/60">Amount</span>
-              <span>₦{quote.sendAmount.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-white/60">Receiver</span>
-              <span>{phone}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-white/60">They receive</span>
-              <span className="text-corridor-400">
-                Bs {quote.receiveAmount.toLocaleString()}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-white/60">Settlement</span>
-              <span>Stellar USDC</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-white/60">Time</span>
-              <span>~2-5 minutes</span>
+        <div className="p-[21px]">
+          <div className="border border-platinum/10 bg-void p-[21px]">
+            <div className="space-y-[8px]">
+              {[
+                ["AMOUNT", `₦${quote.sendAmount.toLocaleString()}`],
+                ["RECEIVER", phone],
+                ["THEY GET", `Bs ${quote.receiveAmount.toLocaleString()}`],
+                ["SETTLE", "Stellar USDC"],
+                ["TIME", "~2-5 min"],
+              ].map(([label, value]) => (
+                <div key={label} className="flex justify-between text-[14px] tracking-[0.04em]">
+                  <span className="text-ash">{label}</span>
+                  <span className={label === "THEY GET" ? "text-accent" : "text-platinum"}>
+                    {value}
+                  </span>
+                </div>
+              ))}
             </div>
             {!connected && (
-              <div className="mt-2 rounded border border-yellow-500/30 bg-yellow-500/10 px-3 py-2 text-xs text-yellow-400">
-                Wallet not connected. Corridor will be created but payment must be completed manually.
+              <div className="mt-[12px] border border-accent/30 bg-accent/10 px-[12px] py-[8px] text-[11px] tracking-[0.042em] text-accent">
+                WALLET NOT CONNECTED — PAYMENT MUST BE COMPLETED MANUALLY
               </div>
             )}
           </div>
 
-          <div className="flex gap-3">
+          <div className="mt-[16px] flex gap-[8px]">
             <button
               onClick={() => setStep("form")}
-              className="flex-1 rounded-lg border border-white/10 px-4 py-3 font-medium text-white/60 transition-colors hover:bg-white/5"
+              className="flex-1 border border-platinum/30 bg-transparent px-[24px] py-[11px] text-[14px] uppercase tracking-[0.04em] text-platinum/60 transition-colors hover:border-platinum hover:text-platinum"
             >
               Back
             </button>
             <button
               onClick={handleCreate}
               disabled={loading}
-              className="flex-1 rounded-lg bg-corridor-600 px-4 py-3 font-medium text-white transition-colors hover:bg-corridor-700 disabled:opacity-50"
+              className="flex-1 border border-platinum bg-platinum px-[24px] py-[11px] text-[14px] uppercase tracking-[0.04em] text-page-canvas transition-colors hover:bg-transparent hover:text-platinum disabled:opacity-30"
             >
               {loading ? (
-                <Loader2 className="mr-2 inline h-4 w-4 animate-spin" />
+                <Loader2 className="mr-[6px] inline h-[14px] w-[14px] animate-spin" />
               ) : (
-                <Send className="mr-2 inline h-4 w-4" />
+                <Send className="mr-[6px] inline h-[14px] w-[14px]" />
               )}
               Create Corridor
             </button>
@@ -278,16 +267,14 @@ export function SendCorridor({ onCreated }: Props) {
       )}
 
       {(step === "creating" || step === "done") && (
-        <div className="mt-6 flex flex-col items-center gap-3 py-8">
+        <div className="flex flex-col items-center gap-[12px] py-[60px]">
           {step === "creating" ? (
-            <Loader2 className="h-8 w-8 animate-spin text-corridor-400" />
+            <Loader2 className="h-[24px] w-[24px] animate-spin text-platinum" />
           ) : (
-            <CheckCircle2 className="h-8 w-8 text-corridor-400" />
+            <CheckCircle2 className="h-[24px] w-[24px] text-accent" />
           )}
-          <p className="text-sm text-white/60">
-            {step === "creating"
-              ? "Creating corridor on Stellar..."
-              : "Corridor created! Tracking..."}
+          <p className="text-[11px] uppercase tracking-[0.042em] text-ash">
+            {step === "creating" ? "Creating corridor..." : "Corridor created"}
           </p>
         </div>
       )}

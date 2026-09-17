@@ -3,9 +3,9 @@ import "./globals.css";
 import { WalletProvider } from "@/components/WalletProvider";
 
 export const metadata: Metadata = {
-  title: "Corridor — Africa ↔ Latin America Payments",
+  title: "Corridor — NG → BO Payments",
   description:
-    "Send money from Nigeria to Bolivia in minutes. Powered by Pollar + Stellar USDC. Non-custodial, agent-collateralized, near-zero fees.",
+    "Send money from Nigeria to Bolivia via Stellar USDC. Non-custodial, agent-collateralized.",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-[#09090b] text-white antialiased">
+      <body className="min-h-screen bg-page-canvas text-platinum">
         <WalletProvider>{children}</WalletProvider>
       </body>
     </html>

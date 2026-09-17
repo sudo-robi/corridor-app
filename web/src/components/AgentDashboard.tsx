@@ -87,89 +87,81 @@ export function AgentDashboard() {
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-white/10 bg-white/5 p-12 text-center">
-        <RefreshCw className="mx-auto h-6 w-6 animate-spin text-white/20" />
-        <p className="mt-4 text-sm text-white/40">Loading agent network...</p>
+      <div className="mt-[28px] border border-platinum/10 bg-deep-surface py-[60px] text-center">
+        <RefreshCw className="mx-auto h-[18px] w-[18px] animate-spin text-ash" />
+        <p className="mt-[12px] text-[11px] uppercase tracking-[0.042em] text-ash">
+          Loading...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-          <div className="flex items-center gap-2 text-xs text-white/40">
-            <Users className="h-3 w-3" />
-            Active Agents
+    <div className="mt-[28px] space-y-[4px]">
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-[4px]">
+        {[
+          { icon: Users, label: "AGENTS", value: agents.length },
+          { icon: TrendingUp, label: "COMPLETED", value: totalCompleted },
+          { icon: Coins, label: "COLLATERAL", value: `$${totalCollateral.toLocaleString()}` },
+        ].map(({ icon: Icon, label, value }) => (
+          <div key={label} className="border border-platinum/10 bg-deep-surface p-[21px]">
+            <div className="flex items-center gap-[8px] text-[11px] uppercase tracking-[0.042em] text-ash">
+              <Icon className="h-[11px] w-[11px]" />
+              {label}
+            </div>
+            <p className="mt-[8px] text-[28px] font-[450] tracking-[0.013em] text-platinum">
+              {value}
+            </p>
           </div>
-          <p className="mt-2 text-2xl font-bold">{agents.length}</p>
-        </div>
-        <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-          <div className="flex items-center gap-2 text-xs text-white/40">
-            <TrendingUp className="h-3 w-3" />
-            Completed
-          </div>
-          <p className="mt-2 text-2xl font-bold">{totalCompleted}</p>
-        </div>
-        <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-          <div className="flex items-center gap-2 text-xs text-white/40">
-            <Coins className="h-3 w-3" />
-            Collateral
-          </div>
-          <p className="mt-2 text-2xl font-bold">
-            ${totalCollateral.toLocaleString()}
-          </p>
-        </div>
+        ))}
       </div>
 
+      {/* Agent list */}
       {agents.length === 0 ? (
-        <div className="rounded-xl border border-white/10 bg-white/5 p-8 text-center">
-          <Shield className="mx-auto h-8 w-8 text-white/20" />
-          <p className="mt-3 text-sm text-white/40">No agents registered yet</p>
-          <p className="mt-1 text-xs text-white/30">
-            Agents register by posting USDC collateral on-chain
+        <div className="border border-platinum/10 bg-deep-surface py-[40px] text-center">
+          <Shield className="mx-auto h-[18px] w-[18px] text-platinum/20" />
+          <p className="mt-[12px] text-[14px] tracking-[0.04em] text-ash">
+            No agents registered
           </p>
         </div>
       ) : (
-        <div className="rounded-xl border border-white/10 bg-white/5">
-          <div className="border-b border-white/10 px-5 py-3">
-            <h3 className="font-medium">Agent Network</h3>
+        <div className="border border-platinum/10 bg-deep-surface">
+          <div className="border-b border-platinum/10 px-[21px] py-[12px] text-[11px] uppercase tracking-[0.042em] text-ash">
+            Agent Network
           </div>
-          <div className="divide-y divide-white/5">
+          <div className="divide-y divide-platinum/10">
             {agents.map((a) => (
-              <div
-                key={a.address}
-                className="px-5 py-4"
-              >
+              <div key={a.address} className="px-[21px] py-[16px]">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-[12px]">
                     <div
-                      className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
+                      className={`flex h-[28px] w-[28px] items-center justify-center ${
                         a.reputation >= 200
-                          ? "bg-corridor-500/20 text-corridor-400"
+                          ? "bg-accent/20 text-accent"
                           : a.reputation >= 100
-                          ? "bg-yellow-500/20 text-yellow-400"
-                          : "bg-red-500/20 text-red-400"
+                          ? "bg-platinum/10 text-platinum"
+                          : "bg-accent/10 text-accent"
                       }`}
                     >
-                      <Shield className="h-4 w-4" />
+                      <Shield className="h-[14px] w-[14px]" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">
+                      <p className="font-[var(--font-mono)] text-[14px] tracking-[0.04em] text-platinum">
                         {a.address.slice(0, 6)}...{a.address.slice(-4)}
                       </p>
-                      <p className="text-xs text-white/40">
-                        Rep: {a.reputation} · {a.supportedSide} ·{" "}
-                        {(a.rateBps / 100).toFixed(1)}% fee
+                      <p className="text-[11px] tracking-[0.042em] text-ash">
+                        REP {a.reputation} · {a.supportedSide.toUpperCase()} ·{" "}
+                        {(a.rateBps / 100).toFixed(1)}%
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm">
-                      {a.activeCorridors}/{a.maxCorridors} active
+                    <p className="text-[14px] tracking-[0.04em] text-platinum">
+                      {a.activeCorridors}/{a.maxCorridors}
                     </p>
-                    <p className="text-xs text-white/40">
-                      ${a.collateral.toLocaleString()} collateral
+                    <p className="text-[11px] tracking-[0.042em] text-ash">
+                      ${a.collateral.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -179,23 +171,23 @@ export function AgentDashboard() {
         </div>
       )}
 
+      {/* Active corridors */}
       {activeCorridors.length > 0 && (
-        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-          <h3 className="font-medium">Active Corridors</h3>
-          <div className="mt-4 space-y-3">
+        <div className="border border-platinum/10 bg-deep-surface">
+          <div className="border-b border-platinum/10 px-[21px] py-[12px] text-[11px] uppercase tracking-[0.042em] text-ash">
+            Active Corridors
+          </div>
+          <div className="divide-y divide-platinum/10">
             {activeCorridors.map((tx) => (
-              <div
-                key={tx.id}
-                className="flex items-center justify-between rounded-lg bg-white/5 px-4 py-3"
-              >
-                <div className="flex items-center gap-3">
-                  <ArrowUpRight className="h-4 w-4 text-yellow-400" />
+              <div key={tx.id} className="flex items-center justify-between px-[21px] py-[16px]">
+                <div className="flex items-center gap-[12px]">
+                  <ArrowUpRight className="h-[14px] w-[14px] text-ash" />
                   <div>
-                    <p className="text-sm font-medium">
+                    <p className="text-[14px] tracking-[0.04em] text-platinum">
                       ₦{tx.amountSend.toLocaleString()} → Bs{" "}
                       {tx.amountReceive.toLocaleString()}
                     </p>
-                    <p className="text-xs text-white/40">
+                    <p className="font-[var(--font-mono)] text-[11px] tracking-[0.042em] text-ash">
                       #{tx.id} · {tx.status} ·{" "}
                       {new Date(tx.createdAt * 1000).toLocaleTimeString()}
                     </p>
@@ -203,9 +195,9 @@ export function AgentDashboard() {
                 </div>
                 <button
                   onClick={() => handleComplete(tx.id)}
-                  className="flex items-center gap-1 rounded-md bg-corridor-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-corridor-700"
+                  className="border border-platinum bg-transparent px-[12px] py-[4px] text-[11px] uppercase tracking-[0.042em] text-platinum transition-colors hover:bg-platinum hover:text-page-canvas"
                 >
-                  <CheckCircle2 className="h-3 w-3" />
+                  <CheckCircle2 className="mr-[4px] inline h-[11px] w-[11px]" />
                   Complete
                 </button>
               </div>
@@ -214,46 +206,45 @@ export function AgentDashboard() {
         </div>
       )}
 
+      {/* Recent activity */}
       {corridors.length > 0 && (
-        <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-          <h3 className="font-medium">Recent Activity</h3>
-          <div className="mt-4 space-y-3">
+        <div className="border border-platinum/10 bg-deep-surface">
+          <div className="border-b border-platinum/10 px-[21px] py-[12px] text-[11px] uppercase tracking-[0.042em] text-ash">
+            Recent Activity
+          </div>
+          <div className="divide-y divide-platinum/10">
             {corridors.slice(0, 5).map((tx) => (
-              <div
-                key={tx.id}
-                className="flex items-center justify-between rounded-lg bg-white/5 px-4 py-3"
-              >
-                <div className="flex items-center gap-3">
+              <div key={tx.id} className="flex items-center justify-between px-[21px] py-[16px]">
+                <div className="flex items-center gap-[12px]">
                   {tx.status === "completed" ? (
-                    <ArrowDownRight className="h-4 w-4 text-corridor-400" />
+                    <ArrowDownRight className="h-[14px] w-[14px] text-accent" />
                   ) : (
-                    <ArrowUpRight className="h-4 w-4 text-yellow-400" />
+                    <ArrowUpRight className="h-[14px] w-[14px] text-ash" />
                   )}
                   <div>
-                    <p className="text-sm font-medium">
+                    <p className="text-[14px] tracking-[0.04em] text-platinum">
                       ₦{tx.amountSend.toLocaleString()} → Bs{" "}
                       {tx.amountReceive.toLocaleString()}
                     </p>
-                    <p className="text-xs text-white/40">
-                      #{tx.id} ·{" "}
-                      {new Date(tx.createdAt * 1000).toLocaleTimeString()}
+                    <p className="font-[var(--font-mono)] text-[11px] tracking-[0.042em] text-ash">
+                      #{tx.id} · {new Date(tx.createdAt * 1000).toLocaleTimeString()}
                     </p>
                   </div>
                 </div>
                 <span
-                  className={`text-xs ${
+                  className={`text-[11px] uppercase tracking-[0.042em] ${
                     tx.status === "completed"
-                      ? "text-corridor-400"
+                      ? "text-accent"
                       : tx.status === "timeout"
-                      ? "text-red-400"
-                      : "text-yellow-400"
+                      ? "text-accent"
+                      : "text-ash"
                   }`}
                 >
                   {tx.status === "completed"
                     ? "Settled"
                     : tx.status === "timeout"
                     ? "Timed Out"
-                    : "In Progress"}
+                    : "Active"}
                 </span>
               </div>
             ))}

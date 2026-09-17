@@ -4,8 +4,8 @@
 
 Two parallel-FX economies meeting at a USDC midpoint on Stellar.
 
-[![Contract CI](https://github.com/your-org/corridor-app/actions/workflows/contract.yml/badge.svg)](https://github.com/your-org/corridor-app/actions/workflows/contract.yml)
-[![Web CI](https://github.com/your-org/corridor-app/actions/workflows/web.yml/badge.svg)](https://github.com/your-org/corridor-app/actions/workflows/web.yml)
+[![Contract CI](https://github.com/sudo-robi/corridor-app/actions/workflows/contract.yml/badge.svg)](https://github.com/sudo-robi/corridor-app/actions/workflows/contract.yml)
+[![Web CI](https://github.com/sudo-robi/corridor-app/actions/workflows/web.yml/badge.svg)](https://github.com/sudo-robi/corridor-app/actions/workflows/web.yml)
 
 ---
 
