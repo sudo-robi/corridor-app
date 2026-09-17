@@ -1,17 +1,13 @@
 import crypto from "crypto";
 
-// Mock the store module
+// Mock the workflow layer (webhook must call markFiatPaid, never raw maps)
 jest.mock("../lib/store", () => ({
-  transitionCorridor: jest.fn(),
-  setCorridor: jest.fn(),
-  getCorridor: jest.fn(),
+  markFiatPaid: jest.fn(),
 }));
 
-import { transitionCorridor, setCorridor, getCorridor } from "../lib/store";
+import { markFiatPaid } from "../lib/store";
 
-const mockTransition = transitionCorridor as jest.MockedFunction<typeof transitionCorridor>;
-const mockSetCorridor = setCorridor as jest.MockedFunction<typeof setCorridor>;
-const mockGetCorridor = getCorridor as jest.MockedFunction<typeof getCorridor>;
+const mockMarkFiatPaid = markFiatPaid as jest.MockedFunction<typeof markFiatPaid>;
 
 function makeWebhookBody(event: string, metadata: any = {}) {
   return {
@@ -66,10 +62,11 @@ describe("Paystack Webhook", () => {
     expect(res.status).toBe(401);
   });
 
-  test("accepts valid signature and transitions corridor", async () => {
-    mockTransition.mockReturnValue({
+  test("routes verified payment through markFiatPaid workflow", async () => {
+    mockMarkFiatPaid.mockReturnValue({
       ok: true,
-      corridor: { id: 42, status: "local_paid", paystackRef: null } as any,
+      corridor: { id: 42, status: "local_paid", paystackRef: "ref_123" } as any,
+      extra: { duplicate: false },
     });
 
     const { POST } = require("../app/api/paystack/webhook/route");
@@ -89,7 +86,7 @@ describe("Paystack Webhook", () => {
     const data = await res.json();
     expect(res.status).toBe(200);
     expect(data.received).toBe(true);
-    expect(mockTransition).toHaveBeenCalledWith(42, "local_paid");
+    expect(mockMarkFiatPaid).toHaveBeenCalledWith(42, "ref_123");
   });
 
   test("ignores non-charge.success events", async () => {
@@ -108,7 +105,7 @@ describe("Paystack Webhook", () => {
 
     const res = await POST(req);
     expect(res.status).toBe(200);
-    expect(mockTransition).not.toHaveBeenCalled();
+    expect(mockMarkFiatPaid).not.toHaveBeenCalled();
   });
 
   test("handles invalid corridorId gracefully", async () => {
@@ -127,6 +124,6 @@ describe("Paystack Webhook", () => {
 
     const res = await POST(req);
     expect(res.status).toBe(200);
-    expect(mockTransition).not.toHaveBeenCalled();
+    expect(mockMarkFiatPaid).not.toHaveBeenCalled();
   });
 });

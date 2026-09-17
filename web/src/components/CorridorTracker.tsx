@@ -170,10 +170,17 @@ export function CorridorTracker() {
               </div>
             )}
 
+            {corridor.paystackRef && (
+              <div className="mt-[12px] font-mono text-[11px] tracking-[0.042em] text-ash">
+                FIAT CONFIRMED · {corridor.paystackRef}
+              </div>
+            )}
+
             {corridor.status === "completed" && (
               <div className="mt-[12px] flex items-center gap-[8px] text-[11px] uppercase tracking-[0.042em] text-accent">
                 <CheckCircle2 className="h-[11px] w-[11px]" />
-                Completed
+                Completed. Bs {corridor.amountReceive.toLocaleString()} to{" "}
+                {corridor.receiverPhone} via BOB-QR
               </div>
             )}
 

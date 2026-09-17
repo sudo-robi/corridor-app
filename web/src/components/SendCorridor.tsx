@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import { Send, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
 import { useWallet } from "./WalletProvider";
+import type { Corridor } from "@/types";
 
 interface Props {
-  onCreated: (corridor: any) => void;
+  onCreated: (corridor: Corridor) => void;
 }
 
 interface ExchangeRate {
@@ -19,6 +20,7 @@ export function SendCorridor({ onCreated }: Props) {
   const { connected, address } = useWallet();
   const [amount, setAmount] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"form" | "confirm" | "creating" | "done">("form");
   const [exchangeRate, setExchangeRate] = useState<ExchangeRate | null>(null);
@@ -46,8 +48,18 @@ export function SendCorridor({ onCreated }: Props) {
 
   const quote = amountNgn >= 1000 ? computeQuote(amountNgn) : null;
 
+  // Explicit order of operations:
+  //   1. Corridor workflow API creates the corridor record
+  //   2. Corridor workflow API matches an agent (accept)
+  //   3. Paystack initialization starts the NGN payment for that corridor
+  // Payment can never start without a corridor, and the corridor id
+  // travels in the Paystack metadata so the webhook can close the loop.
   const handleCreate = async () => {
     if (!quote || !phone) return;
+    if (connected && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Enter a valid email for the Paystack receipt.");
+      return;
+    }
     setStep("creating");
     setLoading(true);
     setError(null);
@@ -88,7 +100,7 @@ export function SendCorridor({ onCreated }: Props) {
           Object.assign(corridor, accepted);
         }
       } catch {
-        // Agent acceptance failed
+        // Agent acceptance failed. Corridor stays in "created".
       }
 
       if (connected && address) {
@@ -98,7 +110,7 @@ export function SendCorridor({ onCreated }: Props) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               amount: amountNgn,
-              email: `${address}@corridor.app`,
+              email,
               corridorId: String(corridorId),
             }),
           });
@@ -108,9 +120,12 @@ export function SendCorridor({ onCreated }: Props) {
             if (authorization_url) {
               window.open(authorization_url, "_blank");
             }
+          } else {
+            const errBody = await paystackRes.json().catch(() => null);
+            console.warn("Paystack init failed:", errBody?.error);
           }
         } catch (e) {
-          console.warn("Paystack init failed:", e);
+          console.warn("Paystack init failed, corridor created without payment:", e);
         }
       }
 
@@ -120,6 +135,7 @@ export function SendCorridor({ onCreated }: Props) {
         setStep("form");
         setAmount("");
         setPhone("");
+        setEmail("");
       }, 800);
     } catch (e: any) {
       setError(e.message || "Failed to create corridor");
@@ -180,6 +196,20 @@ export function SendCorridor({ onCreated }: Props) {
             </div>
           </div>
 
+          <div className="mt-[16px]">
+            <label className="mb-[4px] block text-[11px] uppercase tracking-[0.042em] text-ash">
+              Email (Paystack receipt)
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="w-full border border-platinum/20 bg-iron px-[18px] py-[14px] text-[14px] tracking-[0.04em] text-platinum placeholder:text-ash focus:border-platinum focus:outline-none"
+              style={{ borderRadius: "7px" }}
+            />
+          </div>
+
           {quote && (
             <div className="mt-[16px] border border-platinum/10 bg-void p-[21px]">
               <div className="flex items-center justify-between text-[14px] tracking-[0.04em]">
@@ -224,6 +254,7 @@ export function SendCorridor({ onCreated }: Props) {
               {[
                 ["AMOUNT", `₦${quote.sendAmount.toLocaleString()}`],
                 ["RECEIVER", phone],
+                ["EMAIL", email || "not provided"],
                 ["THEY GET", `Bs ${quote.receiveAmount.toLocaleString()}`],
                 ["SETTLE", "Stellar USDC"],
                 ["TIME", "~2-5 min"],

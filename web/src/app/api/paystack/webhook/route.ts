@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { transitionCorridor, setCorridor, getCorridor } from "@/lib/store";
+import { markFiatPaid } from "@/lib/store";
 
+// Layered confirmation loop:
+//   Paystack rail → this webhook (HMAC verified) → workflow state
+//   (markFiatPaid: marks fiat paid) → settlement adapter (stellar.ts)
+//   pushes the state on-chain. The webhook never writes to the
+//   escrow contract directly and never touches raw store maps.
 export async function POST(req: NextRequest) {
   const secretKey = process.env.PAYSTACK_SECRET_KEY;
   if (!secretKey) {
@@ -21,7 +26,6 @@ export async function POST(req: NextRequest) {
     .update(rawBody)
     .digest("hex");
 
-  // Timing-safe comparison
   const hashBuf = Buffer.from(hash, "hex");
   const expectedBuf = Buffer.from(expectedHash, "hex");
 
@@ -29,7 +33,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
   }
 
-  // NOW parse the body (after verification)
   let body: any;
   try {
     body = JSON.parse(rawBody);
@@ -47,14 +50,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ received: true });
       }
 
-      // Transition corridor: accepted → local_paid
-      const result = transitionCorridor(id, "local_paid");
+      const result = markFiatPaid(id, body.data.reference);
       if (result.ok) {
-        result.corridor.paystackRef = body.data.reference;
-        setCorridor(result.corridor);
-        console.log(`[Paystack] Corridor ${id} → local_paid. Ref: ${body.data.reference}`);
+        console.log(
+          `[Paystack] Corridor ${id} marked fiat paid. Ref: ${body.data.reference}` +
+            (result.extra?.duplicate ? " (duplicate replay ignored)" : "")
+        );
       } else {
-        console.warn(`[Paystack] Corridor ${id} transition failed: ${result.error}`);
+        console.warn(`[Paystack] Corridor ${id} fiat-paid failed: ${result.error}`);
       }
     }
   }

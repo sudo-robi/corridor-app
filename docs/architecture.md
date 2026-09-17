@@ -3,34 +3,41 @@
 ## System Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        CORRIDOR APP                             │
-│                                                                 │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
-│  │  SENDER       │    │  AGENT       │    │  RECEIVER    │      │
-│  │  (Nigeria)    │    │  (P2P)       │    │  (Bolivia)   │      │
-│  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘      │
-│         │                   │                   │               │
-│         ▼                   ▼                   ▼               │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │                    WEB APP (Next.js)                     │   │
-│  │  PollarProvider → Auth → Wallet → Corridor UI           │   │
-│  └─────────────────────────┬───────────────────────────────┘   │
-│                             │                                   │
-│         ┌───────────────────┼───────────────────┐              │
-│         ▼                   ▼                   ▼              │
-│  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐         │
-│  │  Paystack   │   │  Pollar     │   │  Soroban    │         │
-│  │  NGN On-ramp│   │  Wallets +  │   │  Escrow     │         │
-│  │  API        │   │  BOB Ramp   │   │  Contract   │         │
-│  └─────────────┘   └─────────────┘   └─────────────┘         │
-│                             │                                   │
-│                             ▼                                   │
-│                    ┌──────────────┐                            │
-│                    │   Stellar    │                            │
-│                    │   USDC       │                            │
-│                    └──────────────┘                            │
-└─────────────────────────────────────────────────────────────────┘
+PAYMENT INITIATION (ordered: corridor first, payment second)
+
+  SendCorridor.tsx
+    → Corridor workflow API (POST /api/corridors, creates record)
+    → Corridor workflow API (POST /api/corridors/accept, matches agent)
+    → Paystack initialization (starts NGN payment, corridor id in metadata)
+
+CONFIRMATION LOOP (layered: webhook → workflow → settlement)
+
+  Paystack rail
+    → Paystack webhook (HMAC verified, raw body first)
+    → Workflow state (markFiatPaid: marks fiat paid, idempotent)
+    → Settlement adapter (src/lib/stellar.ts pushes state on-chain)
+    → Corridor escrow contract (Soroban)
+
+AGENT SETTLEMENT (explicit payout edge)
+
+  Agent dashboard (accepts and completes)
+    → Corridor workflow API (POST /api/corridors/complete)
+    → Workflow state (reputation +1, slot freed)
+    → Payout instruction (to, amount BOB, rail BOB-QR, agent)
+    → Local agents BOB off-ramp network (QR or bank payout)
+
+SHARED TYPES
+
+  Shared domain types (src/types/index.ts) are imported by the
+  app entry, CorridorTracker, Corridor workflow API responses,
+  and the settlement adapter. CONTRACT_TO_WEB_STATUS maps the
+  Soroban PascalCase enum to the web snake_case status strings.
+
+BUILD PIPELINE
+
+  Contract CI builds the Soroban WASM. The deployed contract
+  address is injected into the settlement adapter at deploy time
+  via NEXT_PUBLIC_CONTRACT_ADDRESS (see web/.env.example).
 ```
 
 ## Components

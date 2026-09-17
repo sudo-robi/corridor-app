@@ -31,6 +31,17 @@ Nigeria and Bolivia share a parallel story: currency devaluation, parallel FX ma
 ## Architecture
 
 ```
+Payment initiation (ordered):
+  SendCorridor → Corridor API (create + accept) → Paystack (NGN payment)
+
+Confirmation loop (layered):
+  Paystack rail → webhook (HMAC) → workflow state (fiat paid)
+    → settlement adapter (stellar.ts) → Soroban escrow
+
+Agent settlement (explicit payout):
+  Agent dashboard → Corridor API (complete)
+    → payout instruction (BOB-QR) → off-ramp network
+
 Nigeria (NGN)                Stellar                   Bolivia (BOB)
 ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
 │ Paystack │─>│  Pollar  │─>│   USDC   │─>│  Pollar  │─>│ Stereum  │
