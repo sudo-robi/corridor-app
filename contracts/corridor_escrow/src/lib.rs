@@ -858,10 +858,8 @@ mod tests {
         let a = register_agent(&env, &client, symbol_short!("both"), 100);
         let sender = Address::generate(&env);
 
-        let id1 =
-            client.create_corridor(&sender, &symbol_short!("p1"), &1_000_000, &50_000, &600);
-        let id2 =
-            client.create_corridor(&sender, &symbol_short!("p2"), &2_000_000, &100_000, &600);
+        let id1 = client.create_corridor(&sender, &symbol_short!("p1"), &1_000_000, &50_000, &600);
+        let id2 = client.create_corridor(&sender, &symbol_short!("p2"), &2_000_000, &100_000, &600);
 
         client.accept_corridor(&a, &id1);
         client.accept_corridor(&a, &id2);
@@ -885,13 +883,8 @@ mod tests {
         let sender = Address::generate(&env);
 
         for i in 1..=3 {
-            let id = client.create_corridor(
-                &sender,
-                &symbol_short!("ph"),
-                &1_000_000,
-                &50_000,
-                &600,
-            );
+            let id =
+                client.create_corridor(&sender, &symbol_short!("ph"), &1_000_000, &50_000, &600);
             client.accept_corridor(&a, &id);
             client.confirm_local_payment(&sender, &id);
             client.confirm_remote_payment(&a, &id);
@@ -959,8 +952,7 @@ mod tests {
         let (env, _, client) = setup();
         let a = register_agent(&env, &client, symbol_short!("both"), 250);
         let sender = Address::generate(&env);
-        let id =
-            client.create_corridor(&sender, &symbol_short!("p1"), &1_000_000, &50_000, &600);
+        let id = client.create_corridor(&sender, &symbol_short!("p1"), &1_000_000, &50_000, &600);
         client.accept_corridor(&a, &id);
 
         let c = client.get_corridor(&id).unwrap();
