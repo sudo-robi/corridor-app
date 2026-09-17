@@ -238,7 +238,7 @@ export function SendCorridor({ onCreated }: Props) {
             </div>
             {!connected && (
               <div className="mt-[12px] border border-accent/30 bg-accent/10 px-[12px] py-[8px] text-[11px] tracking-[0.042em] text-accent">
-                WALLET NOT CONNECTED — PAYMENT MUST BE COMPLETED MANUALLY
+                WALLET NOT CONNECTED. COMPLETE PAYMENT MANUALLY.
               </div>
             )}
           </div>

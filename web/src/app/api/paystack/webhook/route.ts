@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Not configured" }, { status: 500 });
   }
 
-  // Read raw body BEFORE parsing — needed for HMAC verification
+  // Read raw body BEFORE parsing. Required for HMAC verification.
   const rawBody = await req.text();
 
   const hash = req.headers.get("x-paystack-signature");

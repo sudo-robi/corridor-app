@@ -8,7 +8,7 @@ import {
   getAgent,
 } from "@/lib/store";
 
-// POST /api/corridors/accept — Simulate agent accepting a corridor
+// POST /api/corridors/accept. Simulates agent accepting a corridor.
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { corridorId, agentAddress } = body;

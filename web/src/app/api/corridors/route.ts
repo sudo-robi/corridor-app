@@ -113,7 +113,7 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ corridor: result.corridor });
   }
 
-  // No status change — apply partial updates
+  // No status change. Apply partial updates directly.
   if (body.agent !== undefined) corridor.agent = body.agent;
   if (body.completedAt !== undefined) corridor.completedAt = body.completedAt;
   if (body.paystackRef !== undefined) corridor.paystackRef = body.paystackRef;

@@ -31,7 +31,7 @@ The agent network model scales to any corridor:
 - **Agent network**: Hard to replicate, grows with volume
 - **Stellar**: Fast, cheap, non-custodial
 - **Pollar**: Already has the infrastructure
-- **Story**: Two parallel-FX economies — unique positioning
+- **Story**: Two parallel-FX economies with unique positioning
 
 ## Risk Assessment
 

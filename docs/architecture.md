@@ -42,14 +42,14 @@
 - Persistent storage: agent data (keyed by address), corridor data (keyed by ID), agent address list
 
 **Key functions:**
-- `register_agent` — Agent posts collateral, gets registered with side/rate
-- `find_best_agent` — Matches corridor to best available agent
-- `create_corridor` — Sender initiates transfer
-- `accept_corridor` — Agent takes the corridor
-- `confirm_local_payment` — Sender confirms NGN sent
-- `confirm_remote_payment` — Agent confirms BOB sent
-- `settle_corridor` — Complete, release collateral, update reputation
-- `timeout_refund` — Expired corridor, slash agent, free slot
+- `register_agent`: Agent posts collateral, gets registered with side/rate
+- `find_best_agent`: Matches corridor to best available agent
+- `create_corridor`: Sender initiates transfer
+- `accept_corridor`: Agent takes the corridor
+- `confirm_local_payment`: Sender confirms NGN sent
+- `confirm_remote_payment`: Agent confirms BOB sent
+- `settle_corridor`: Complete, release collateral, update reputation
+- `timeout_refund`: Expired corridor, slash agent, free slot
 
 **Reputation system:**
 - Start at 100
@@ -60,16 +60,16 @@
 ### 2. Web App (`web/`)
 
 **Pages:**
-- `/` — Main corridor app (Send, Track, Agent tabs)
-- `/api/paystack/initialize` — Initialize Paystack payment
-- `/api/paystack/webhook` — Paystack webhook handler
+- `/`: Main corridor app (Send, Track, Agent tabs)
+- `/api/paystack/initialize`: Initialize Paystack payment
+- `/api/paystack/webhook`: Paystack webhook handler
 
 **Components:**
-- `CorridorApp` — Tab container with state management
-- `Header` — Nigeria ↔ Bolivia branding
-- `SendCorridor` — NGN amount input, quote computation, corridor creation
-- `CorridorTracker` — Status visualization with progress bar
-- `AgentDashboard` — Network stats, agent list, activity feed
+- `CorridorApp`: Tab container with state management
+- `Header`: Nigeria ↔ Bolivia branding
+- `SendCorridor`: NGN amount input, quote computation, corridor creation
+- `CorridorTracker`: Status visualization with progress bar
+- `AgentDashboard`: Network stats, agent list, activity feed
 
 ### 3. Paystack Integration
 

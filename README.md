@@ -1,6 +1,6 @@
 # Corridor
 
-**Send money from Nigeria to Bolivia in minutes — not days.**
+**Send money from Nigeria to Bolivia in minutes.**
 
 Two parallel-FX economies meeting at a USDC midpoint on Stellar.
 
@@ -119,12 +119,11 @@ Run tests: `cargo test` (23/23 passing)
 
 ## Docs
 
-- [Problem Statement](docs/problem.md) — Why this corridor matters
-- [Architecture](docs/architecture.md) — System design and data flow
-- [Corridor Design](docs/corridor-design.md) — Agent network and fallback flows
-- [Feasibility](docs/feasibility.md) — Beyond the hackathon
-- [UX Design](docs/ux.md) — Design decisions and accessibility
-- [Demo Script](docs/demo-script.md) — 3-minute walkthrough
+- [Problem Statement](docs/problem.md): why this corridor matters
+- [Architecture](docs/architecture.md): system design and data flow
+- [Corridor Design](docs/corridor-design.md): agent network and fallback flows
+- [Feasibility](docs/feasibility.md): beyond the hackathon
+- [UX Design](docs/ux.md): design decisions and accessibility
 
 ## License
 

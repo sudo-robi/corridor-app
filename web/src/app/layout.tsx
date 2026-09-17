@@ -3,7 +3,7 @@ import "./globals.css";
 import { WalletProvider } from "@/components/WalletProvider";
 
 export const metadata: Metadata = {
-  title: "Corridor — NG → BO Payments",
+  title: "Corridor: NG to BO Payments",
   description:
     "Send money from Nigeria to Bolivia via Stellar USDC. Non-custodial, agent-collateralized.",
 };

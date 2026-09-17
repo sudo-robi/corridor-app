@@ -1,6 +1,6 @@
-# Corridor — Nigeria ↔ Bolivia Payments
+# Corridor: Nigeria to Bolivia Payments
 
-**Send money from Lagos to La Paz in minutes — not days.**
+**Send money from Lagos to La Paz in minutes.**
 
 Two parallel-FX economies meeting at a USDC midpoint on Stellar.
 
@@ -8,7 +8,7 @@ Two parallel-FX economies meeting at a USDC midpoint on Stellar.
 
 Corridor is a cross-border remittance app for the Africa ↔ Latin America corridor. A Nigerian freelancer gets paid by a Bolivian client. The money moves in minutes, not days. Local agents on both sides handle the cash in/out, collateralized on-chain with reputation that compounds.
 
-## The Problem (Judges Category 1 — 20 pts)
+## The Problem (Judges Category 1, 20 pts)
 
 Nigeria and Bolivia share a parallel story: currency devaluation, parallel FX markets, and populations that treat dollars as a savings product rather than a payment instrument.
 
@@ -21,7 +21,7 @@ Nigeria and Bolivia share a parallel story: currency devaluation, parallel FX ma
 2. Bolivian SME paying Nigerian contractor
 3. Diaspora sending money home
 
-## The Solution (Judges Category 2 — 25 pts)
+## The Solution (Judges Category 2, 25 pts)
 
 **Architecture:**
 
@@ -49,7 +49,7 @@ Nigeria (NGN)                    Stellar                     Bolivia (BOB)
 - **Non-custodial end to end**: Pollar handles embedded wallets, users never see seed phrases
 - **Yield on transit**: Idle USDC can sit in Blend/DeFindex pools while waiting
 
-## Working Product (Judges Category 3 — 20 pts)
+## Working Product (Judges Category 3, 20 pts)
 
 - ✅ Soroban escrow contract: 23/23 tests passing, 16KB WASM
 - ✅ Next.js web app: TypeScript strict, builds clean
@@ -59,15 +59,15 @@ Nigeria (NGN)                    Stellar                     Bolivia (BOB)
 - ✅ Paystack integration: Initialize + webhook verification
 - ✅ CI/CD: GitHub Actions for contract (fmt/clippy/test/WASM) and web (tsc/eslint/build)
 
-## Creativity & Innovation (Judges Category 4 — 20 pts)
+## Creativity and Innovation (Judges Category 4, 20 pts)
 
 **What makes this different:**
-1. **Agent escrow on Soroban**: Not just an SDK demo — real smart contract with collateral, timeout, reputation slashing
+1. **Agent escrow on Soroban**: not just an SDK demo. A real smart contract with collateral, timeout, and reputation slashing.
 2. **find_best_agent algorithm**: Matches corridors to agents by reputation, rate, and capacity
-3. **The story**: "Two parallel-FX economies meeting at a USDC midpoint" — no other team will have this framing
+3. **The story**: two parallel-FX economies meeting at a USDC midpoint. No other team has this framing.
 4. **Semi-manual fallback**: Documented, realistic for hackathon, honest about what's automated vs. coordinated
 
-## UX & Design (Judges Category 5 — 10 pts)
+## UX and Design (Judges Category 5, 10 pts)
 
 - Mobile-first responsive design
 - Dark theme with green (Nigeria) and red (Bolivia) accents
@@ -75,7 +75,7 @@ Nigeria (NGN)                    Stellar                     Bolivia (BOB)
 - Accessible form labels, error states, loading states
 - Agent reputation visualized with color coding
 
-## Feasibility & Impact (Judges Category 7 — 5 pts)
+## Feasibility and Impact (Judges Category 7, 5 pts)
 
 **Beyond hackathon:**
 - Real Paystack integration (sandbox → production)

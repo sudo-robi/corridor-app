@@ -60,9 +60,9 @@ export interface CorridorQuote {
 
 export const STATUS_LABELS: Record<CorridorStatus, string> = {
   created: "Waiting for Agent",
-  accepted: "Agent Matched — Pay Locally",
-  local_paid: "NGN Received — Paying BOB",
-  remote_paid: "BOB Sent — Settling",
+  accepted: "Agent Matched",
+  local_paid: "NGN Received",
+  remote_paid: "BOB Sent",
   completed: "Completed",
   timeout: "Timed Out",
 };

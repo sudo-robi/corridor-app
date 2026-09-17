@@ -7,7 +7,7 @@ import {
   patchAgent,
 } from "@/lib/store";
 
-// POST /api/corridors/complete — Simulate corridor completion
+// POST /api/corridors/complete. Simulates corridor completion.
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { corridorId } = body;

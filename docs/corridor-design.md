@@ -1,4 +1,4 @@
-# Corridor Design — Africa ↔ Latin America
+# Corridor Design: Africa to Latin America
 
 ## Why This Corridor?
 
