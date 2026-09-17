@@ -1,0 +1,12 @@
+node_modules/
+.next/
+target/
+*.wasm
+.env.local
+.env
+dist/
+build/
+pnpm-lock.yaml
+package-lock.json
+tsconfig.tsbuildinfo
+test_snapshots/
